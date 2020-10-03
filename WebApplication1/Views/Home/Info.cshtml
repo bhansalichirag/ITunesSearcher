@@ -43,8 +43,12 @@
     });
 
 
-    function myFunction(myMessage,myMessage2) {
-        alert(myMessage + " " + myMessage2.replaceAll("+"," "));
+    function myFunction(myMessage, myMessage2) {
+        $.ajax({
+            url: '/Home/RecordClick',
+            data: { str1: myMessage.replaceAll("+", " "), str2: myMessage2 }
+        });
+        //alert(myMessage + " " + myMessage2.replaceAll("+"," "));
     }
 
     function myFunction2(myMessage) {
@@ -65,15 +69,14 @@
             options.dataType = "json";
             options.success = function (data) {
                 data.forEach(function (element) {
-                    console.log(element);
+                    //console.log(element);
                     var temp = JSON.stringify(element.trackViewURL);
                     $("#tablebody").append("<tr><td>" +
                         JSON.stringify(element.trackName) + "</td><td>" +
                         JSON.stringify(element.averageUserRating) +
                         "</td><td>" + JSON.stringify(element.releaseDate) +
                         "</td><td>" + JSON.stringify(element.userRatingCount)+
-                        "</td><td><a href=javascript:myFunction(" + JSON.parse(element.trackId) + "," + JSON.stringify(element.trackName).trim().replace(/ /g, "+") + ");myFunction2("
-                        + temp + ");>Link</a></td></tr>")
+                        "</td><td><a href=javascript:myFunction(" + JSON.stringify(element.trackName).trim().replace(/ /g, "+") + "," + temp +");myFunction2("+temp+");>Link</a></td></tr>")
                 });
             };
             options.error = function () {
@@ -94,18 +97,18 @@
 
     <br />
     <br />
-
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Track Name</th>
-                <th>AverageUserRating</th>
-                <th>ReleaseDate</th>
-                <th>UserRatingCount</th>
-                <th>Track Link</th>
-            </tr>
-        </thead>
-        <tbody id="tablebody">
-        </tbody>
-    </table>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Track Name</th>
+                    <th>AverageUserRating</th>
+                    <th>ReleaseDate</th>
+                    <th>UserRatingCount</th>
+                    <th>Track Link</th>
+                </tr>
+            </thead>
+            <tbody id="tablebody">
+            </tbody>
+        </table>
+    
 </div>
