@@ -1,0 +1,111 @@
+﻿@model List<WebApplication1.Models.SearchResult>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+@{
+    ViewData["Title"] = "Search Ebooks";
+}
+
+<style>
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    table, td, th {
+        border: 1px solid black;
+    }
+
+    th, td {
+        padding: 8px;
+        text-align: center;
+        border-bottom: 1px solid #ddd;
+    }
+
+    tr:hover {
+        background-color: #f5f5f5;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+    th, td {
+        padding: 15px;
+    }
+</style>
+
+
+<h1>Search Ebooks on ITunes</h1>
+
+<script>
+    $(document).ready(function () {
+    });
+
+
+    function myFunction(myMessage,myMessage2) {
+        alert(myMessage + " " + myMessage2.replaceAll("+"," "));
+    }
+
+    function myFunction2(myMessage) {
+        //window.location.href = myMessage;
+        window.open(myMessage, '_blank');
+    }
+
+    function hello1() {
+        var query = document.getElementById("fname").value;
+        console.log(query);
+
+        if (query == "")
+            alert("Enter some value");
+        else {
+            var options = {};
+            options.url = "/api/search/"+query;
+            options.type = "GET";
+            options.dataType = "json";
+            options.success = function (data) {
+                data.forEach(function (element) {
+                    console.log(element);
+                    var temp = JSON.stringify(element.trackViewURL);
+                    $("#tablebody").append("<tr><td>" +
+                        JSON.stringify(element.trackName) + "</td><td>" +
+                        JSON.stringify(element.averageUserRating) +
+                        "</td><td>" + JSON.stringify(element.releaseDate) +
+                        "</td><td>" + JSON.stringify(element.userRatingCount)+
+                        "</td><td><a href=javascript:myFunction(" + JSON.parse(element.trackId) + "," + JSON.stringify(element.trackName).trim().replace(/ /g, "+") + ");myFunction2("
+                        + temp + ");>Link</a></td></tr>")
+                });
+            };
+            options.error = function () {
+                $("#msg").html("Error while calling the Web API!");
+            };
+            $.ajax(options);
+        }
+       
+    }
+
+</script>
+
+
+<div style="overflow-x:auto;">
+    <input type="text" id="fname" name="query" value="">
+    
+    <button id="button1" onclick="hello1()">Click</button>
+
+    <br />
+    <br />
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Track Name</th>
+                <th>AverageUserRating</th>
+                <th>ReleaseDate</th>
+                <th>UserRatingCount</th>
+                <th>Track Link</th>
+            </tr>
+        </thead>
+        <tbody id="tablebody">
+        </tbody>
+    </table>
+</div>
