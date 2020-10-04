@@ -1,115 +1,98 @@
 ﻿@model List<WebApplication1.Models.SearchResult>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-
-@{
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="~/css/site.css">
+    @{
     ViewData["Title"] = "Search Ebooks";
-}
-
-<style>
-    table {
-        border-collapse: collapse;
-        width: 100%;
     }
 
-    table, td, th {
-        border: 1px solid black;
-    }
 
-    th, td {
-        padding: 8px;
-        text-align: center;
-        border-bottom: 1px solid #ddd;
-    }
+    <h1 class="text-primary" style="text-align:center">Search Ebooks on ITunes</h1>
 
-    tr:hover {
-        background-color: #f5f5f5;
-    }
+    <script>
+        $(document).ready(function () {
+            var input = document.getElementById("queryid");
 
-    tr:nth-child(even) {
-        background-color: #f2f2f2;
-    }
-
-    th, td {
-        padding: 15px;
-    }
-</style>
-
-
-<h1 class="text-primary" style="text-align:center">Search Ebooks on ITunes</h1>
-
-<script>
-    $(document).ready(function () {
-    });
-
-
-    function myFunction(myMessage, myMessage2) {
-        $.ajax({
-            url: '/Home/RecordClick',
-            data: { str1: myMessage.replaceAll("+", " "), str2: myMessage2 }
+            // Execute a function when the user releases a key on the keyboard
+            input.addEventListener("keyup", function (event) {
+                // Number 13 is the "Enter" key on the keyboard
+                if (event.keyCode === 13) {
+                    // Cancel the default action, if needed
+                    event.preventDefault();
+                    // Trigger the button element with a click
+                    document.getElementById("button1").click();
+                }
+            });
         });
-        //alert(myMessage + " " + myMessage2.replaceAll("+"," "));
-    }
 
-    function myFunction2(myMessage) {
-        //window.location.href = myMessage;
-        window.open(myMessage, '_blank');
-    }
 
-    function hello1() {
-        var query = document.getElementById("fname").value;
-        console.log(query);
-
-        if (query == "")
-            alert("Enter some value");
-        else {
-            $("#tablebody").empty();
-            var options = {};
-            options.url = "/api/search/book/"+query;
-            options.type = "GET";
-            options.dataType = "json";
-            options.success = function (data) {
-                data.forEach(function (element) {
-                    //console.log(element);
-                    var temp = JSON.stringify(element.trackViewURL);
-                    $("#tablebody").append("<tr><td>" +
-                        JSON.stringify(element.trackName) + "</td><td>" +
-                        JSON.stringify(element.averageUserRating) +
-                        "</td><td>" + JSON.stringify(element.releaseDate) +
-                        "</td><td>" + JSON.stringify(element.userRatingCount)+
-                        "</td><td><a href=javascript:myFunction(" + JSON.stringify(element.trackName).trim().replace(/ /g, "+") + "," + temp +");myFunction2("+temp+");>Link</a></td></tr>")
-                });
-            };
-            options.error = function () {
-                $("#msg").html("Error while calling the Web API!");
-            };
-            $.ajax(options);
+        function myFunction(myMessage, myMessage2) {
+            $.ajax({
+                url: '/Home/RecordClick',
+                data: { str1: myMessage.replaceAll("+", " "), str2: myMessage2 }
+            });
+            //alert(myMessage + " " + myMessage2.replaceAll("+"," "));
         }
-       
-    }
 
-</script>
+        function myFunction2(myMessage) {
+            //window.location.href = myMessage;
+            window.open(myMessage, '_blank');
+        }
+
+        function hello1() {
+            var query = document.getElementById("queryid").value;
+            //console.log(query);
+
+            if (query == "")
+                alert("Enter some value");
+            else {
+                $("#tablebody").empty();
+                var options = {};
+                options.url = "/api/search/book/" + query;
+                options.type = "GET";
+                options.dataType = "json";
+                options.success = function (data) {
+                    data.forEach(function (element) {
+                        //console.log(element);
+                        var temp = JSON.stringify(element.trackViewURL);
+                        $("#tablebody").append("<tr><td>" +
+                            JSON.stringify(element.trackName) + "</td><td>" +
+                            JSON.stringify(element.averageUserRating) +
+                            "</td><td>" + JSON.stringify(element.releaseDate) +
+                            "</td><td>" + JSON.stringify(element.userRatingCount) +
+                            "</td><td><a href=javascript:myFunction(" + JSON.stringify(element.trackName).trim().replace(/ /g, "+") + "," + temp + ");myFunction2(" + temp + ");>Link</a></td></tr>")
+                    });
+                };
+                options.error = function () {
+                    $("#msg").html("Error while calling the Web API!");
+                };
+                $.ajax(options);
+            }
+
+        }
+
+    </script>
 
 
-<div style="overflow-x:auto;">
-    <input type="text" id="fname" name="query" value="">
-    
-    <button id="button1" onclick="hello1()">Click</button>
+    <div style="overflow-x:auto;">
+        <input type="text" id="queryid" name="query" value="">
 
-    <br />
-    <br />
-        <table class="table">
+        <input type="button" class=btn-primary id="button1" onclick="hello1()" value="Search"/>
+
+        <br />
+        <br />
+        <table class="table table-bordered">
             <thead>
                 <tr>
-                    <th>Track Name</th>
-                    <th>AverageUserRating</th>
-                    <th>ReleaseDate</th>
-                    <th>UserRatingCount</th>
-                    <th>Track Link</th>
+                    <th>Book Name</th>
+                    <th>Average User Rating</th>
+                    <th>Release Date</th>
+                    <th>User Rating Count</th>
+                    <th>ITunes Link</th>
                 </tr>
             </thead>
             <tbody id="tablebody">
             </tbody>
         </table>
-    
-</div>
+
+    </div>

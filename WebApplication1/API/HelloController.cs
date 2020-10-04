@@ -23,7 +23,7 @@ namespace WebApplication1.API
             List<SearchResult> temp = new List<SearchResult>();
             using (var client = new HttpClient())
             {
-                var url = new Uri($"https://itunes.apple.com/search?term=Big&entity=ebook");
+                var url = new Uri($"https://itunes.apple.com/search?term=Big&entity=ebook&limit=20");
                 var response = await client.GetAsync(url);
 
                 string json;
