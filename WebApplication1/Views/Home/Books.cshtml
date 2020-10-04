@@ -36,7 +36,7 @@
 </style>
 
 
-<h1>Search Ebooks on ITunes</h1>
+<h1 class="text-primary" style="text-align:center">Search Ebooks on ITunes</h1>
 
 <script>
     $(document).ready(function () {
@@ -63,8 +63,9 @@
         if (query == "")
             alert("Enter some value");
         else {
+            $("#tablebody").empty();
             var options = {};
-            options.url = "/api/search/"+query;
+            options.url = "/api/search/book/"+query;
             options.type = "GET";
             options.dataType = "json";
             options.success = function (data) {

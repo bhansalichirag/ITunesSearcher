@@ -16,7 +16,7 @@ namespace WebApplication1.API
     [ApiController]
     public class HelloController : ControllerBase
     {
-        // GET: api/<HelloController>
+        // GET: api/search
         [HttpGet]
         public async Task<List<SearchResult>> Get()
         {
@@ -45,16 +45,16 @@ namespace WebApplication1.API
             return temp;
         }
 
-        // GET api/<HelloController>/5
-        [HttpGet("{id}")]
-        public async Task<List<SearchResult>> Get(String id)
+        // GET api/search/book/5
+        [HttpGet("book/{id}")]
+        public async Task<List<SearchResult>> GetBooks(String id)
         {
             List<SearchResult> temp = new List<SearchResult>();
             if (id.Equals(""))
                 return temp;
             using (var client = new HttpClient())
             {
-                var url = new Uri($"https://itunes.apple.com/search?term="+id+"&entity=ebook");
+                var url = new Uri($"https://itunes.apple.com/search?term=" + id +"&entity=ebook");
                 var response = await client.GetAsync(url);
 
                 string json;
@@ -87,24 +87,6 @@ namespace WebApplication1.API
             }
             return temp;
 
-        }
-
-        // POST api/<HelloController>
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
-
-        // PUT api/<HelloController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/<HelloController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
         }
     }
 }

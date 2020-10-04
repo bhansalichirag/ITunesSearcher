@@ -21,24 +21,11 @@ namespace WebApplication1.Controllers
             _db = db;
         }
 
-        public IActionResult Index()
-        {
-            Employee emp = new Employee();
-            emp.FullName = "Nancy Davolio";
-            ViewData["heading"] = "Welcome to ASP.NET Core MVC !!";
-            return View(emp);
-        }
-        
         public void RecordClick(string str1,string str2)
         {
             ClickInfo obj = new ClickInfo { count = 1, TrackName = str1, TrackURL = str2 };
             _db.ClickInfo.Add(obj);
             _db.SaveChanges();
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
         }
 
         public IActionResult ClickInfo()
@@ -53,7 +40,7 @@ namespace WebApplication1.Controllers
             return View(objList);
         }
 
-        public IActionResult Info()
+        public IActionResult Books()
         {
             return View();
         }
