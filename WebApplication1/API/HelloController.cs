@@ -142,5 +142,53 @@ namespace WebApplication1.API
             return temp;
 
         }
+
+        // GET api/search/musicVideo/5
+        [HttpGet("musicVideo/{id}")]
+        public async Task<List<SearchResult>> GetMusicVideo(String id)
+        {
+            List<SearchResult> temp = new List<SearchResult>();
+            if (id.Equals(""))
+                return temp;
+            using (var client = new HttpClient())
+            {
+                var url = new Uri($"https://itunes.apple.com/search?term=" + id + "&entity=musicVideo&limit=20");
+                var response = await client.GetAsync(url);
+
+                string json;
+                using (var content = response.Content)
+                    json = await content.ReadAsStringAsync();
+                JObject json1 = JObject.Parse(json);
+                foreach (var t in json1["results"])
+                {
+                    string trackurl = "";
+                    string trackname = "";
+                    string releasedate = "";
+                    string author = "";
+                    string authorurl = "";
+                    string primarygenrename = "";
+                    int tracktimemillis = 0;
+                    if (t["trackName"] != null)
+                        trackname = t["trackName"].ToString();
+                    if (t["trackViewUrl"] != null)
+                        trackurl = t["trackViewUrl"].ToString();
+                    if (t["releaseDate"] != null)
+                        releasedate = t["releaseDate"].ToString();
+                    if (t["artistName"] != null)
+                        author = t["artistName"].ToString();
+                    if (t["artistViewUrl"] != null)
+                        authorurl = t["artistViewUrl"].ToString();
+                    if (t["primaryGenreName"] != null)
+                        primarygenrename = t["primaryGenreName"].ToString();
+                    if (t["trackTimeMillis"] != null)
+                        tracktimemillis = (int)t["trackTimeMillis"];
+                    if (!trackurl.Equals("") && !trackname.Equals("") && !releasedate.Equals("") && !author.Equals("") && !authorurl.Equals("") && !primarygenrename.Equals("") && tracktimemillis!=0)
+                        temp.Add(new SearchResult { TrackViewURL = trackurl, TrackName = trackname, ReleaseDate = releasedate, ArtistName = author, artistViewURL = authorurl, PrimaryGenreName = primarygenrename, TrackTimeMillis = tracktimemillis });
+                }
+            }
+            return temp;
+
+        }
+
     }
 }
