@@ -63,9 +63,10 @@
                     data.forEach(function (element) {
                         counter++;
                         var temp = JSON.stringify(element.trackViewURL);
-                        $("#tablebody").append("<tr><td>" +
-                            JSON.stringify(element.trackName) + "</td><td>" +
-                            JSON.stringify(element.contentAdvisoryRating) +
+                        $("#tablebody").append(
+                            "<tr><td>" + JSON.stringify(element.trackName) + 
+                            "</td><td>" + JSON.stringify(element.artistName) +
+                            "</td><td>" + JSON.stringify(element.contentAdvisoryRating) +
                             "</td><td>" + new Date(JSON.stringify(element.releaseDate)).toLocaleDateString() +
                             "</td><td>" + JSON.stringify(element.primaryGenreName) +
                             "</td><td>" + msToHMS(JSON.parse(element.trackTimeMillis)) +
@@ -85,6 +86,7 @@
 
 
 <div style="overflow-x:auto;" id="divid">
+    <br /><br />
     <label>Enter your Movie name:</label>
     <input type="text" id="queryid" name="query" value="">
 
@@ -96,11 +98,12 @@
         <thead>
             <tr>
                 <th>Movie Name</th>
+                <th>Director Name</th>
                 <th>Content Advisory Rating</th>
                 <th>Release Date</th>
                 <th>Genre</th>
                 <th>Time</th>
-                <th>ITunes Link</th>
+                <th>ITunes Movie Link</th>
             </tr>
         </thead>
         <tbody id="tablebody">

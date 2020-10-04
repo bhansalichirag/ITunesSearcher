@@ -33,6 +33,10 @@
             window.open(myMessage, '_blank');
         }
 
+        function myFunction3(myMessage) {
+            window.open(myMessage.replace("artist","author"), '_blank');
+        }
+
         function hello1() {
             var query = document.getElementById("queryid").value;
         
@@ -50,12 +54,16 @@
                     data.forEach(function (element) {
                         counter++;
                         var temp = JSON.stringify(element.trackViewURL);
-                        $("#tablebody").append("<tr><td>" +
-                            JSON.stringify(element.trackName) + "</td><td>" +
-                            JSON.stringify(element.averageUserRating) +
+                        var temp2 = JSON.stringify(element.artistViewURL);
+                        $("#tablebody").append(
+                            "<tr><td>"  + JSON.stringify(element.trackName) + 
+                            "</td><td>" + JSON.stringify(element.artistName) +
+                            "</td><td>" + JSON.stringify(element.averageUserRating) +
                             "</td><td>" + new Date(JSON.stringify(element.releaseDate)).toLocaleDateString() +
                             "</td><td>" + JSON.stringify(element.userRatingCount) +
-                            "</td><td><a href=javascript:myFunction(" + JSON.stringify(element.trackName).trim().replace(/ /g, "+") + "," + temp + ");myFunction2(" + temp + ");>Link</a></td></tr>")
+                            "</td><td><a href=javascript:myFunction(" + JSON.stringify(element.trackName).trim().replace(/ /g, "+") + "," + temp + ");myFunction2(" + temp +
+                            ");>Link</a></td><td><a href=javascript:myFunction(" + JSON.stringify(element.artistName).trim().replace(/ /g, "+") + "," + temp2 + ");myFunction3(" + temp2 +
+                            ");>Link</a></td></tr>")
                     });
                     document.getElementById("pid").innerHTML = counter+" records found";
                 };
@@ -71,10 +79,11 @@
 
 
     <div style="overflow-x:auto;" id="divid">
+        <br /><br />
         <label>Enter your book name:</label>
         <input type="text" id="queryid" name="query" value="">
 
-        <input type="button" class=btn-primary id="button1" onclick="hello1()" value="Search"/>
+        <input type="button" class=btn-primary id="button1" onclick="hello1()" value="Search" />
 
         <br />
         <br />
@@ -82,10 +91,12 @@
             <thead>
                 <tr>
                     <th>Book Name</th>
+                    <th>Author</th>
                     <th>Average User Rating</th>
                     <th>Release Date</th>
                     <th>User Rating Count</th>
-                    <th>ITunes Link</th>
+                    <th>ITunes Book Link</th>
+                    <th>ITunes Author Link</th>
                 </tr>
             </thead>
             <tbody id="tablebody">

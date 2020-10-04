@@ -45,5 +45,10 @@ namespace WebApplication1.Models
 
         public string PrimaryGenreName { get; set; }
 
+        [DataMember(Name = "artistName")]
+        public string ArtistName { get; set; }
+
+        [DataMember(Name = "artistViewUrl")]
+        public string artistViewURL { get; set; }
     }
 }

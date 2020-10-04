@@ -70,6 +70,8 @@ namespace WebApplication1.API
                     double avgRating = 0;
                     string releasedate = "";
                     int userratingcount = 0;
+                    string author = "";
+                    string authorurl = "";
                     if (t["trackId"] != null)
                         trackid = (int)t["trackId"];
                     if (t["trackName"] != null)
@@ -82,8 +84,12 @@ namespace WebApplication1.API
                         releasedate = t["releaseDate"].ToString();
                     if (t["userRatingCount"] != null)
                         userratingcount = (int)t["userRatingCount"];
-                    if (!trackurl.Equals("") && trackid != 0 && !trackname.Equals("") && avgRating!=0 && !releasedate.Equals("") && userratingcount!=0)
-                        temp.Add(new SearchResult { TrackId = trackid, TrackViewURL = trackurl, TrackName = trackname, AverageUserRating=avgRating, ReleaseDate=releasedate, UserRatingCount=userratingcount });
+                    if (t["artistName"] != null)
+                        author = t["artistName"].ToString();
+                    if (t["artistViewUrl"] != null)
+                        authorurl = t["artistViewUrl"].ToString();
+                    if (!trackurl.Equals("") && trackid != 0 && !trackname.Equals("") && avgRating!=0 && !releasedate.Equals("") && userratingcount!=0 && !author.Equals("") && !authorurl.Equals(""))
+                        temp.Add(new SearchResult { TrackId = trackid, TrackViewURL = trackurl, TrackName = trackname, AverageUserRating=avgRating, ReleaseDate=releasedate, UserRatingCount=userratingcount, ArtistName=author, artistViewURL = authorurl });
                 }
             }
             return temp;
@@ -113,6 +119,7 @@ namespace WebApplication1.API
                     string primarygenrename = "";
                     int tracktimemillis = 0;
                     string releasedate = "";
+                    string author = "";
                     string contentadvisoryrating = "";
                     if (t["contentAdvisoryRating"] != null)
                         contentadvisoryrating = t["contentAdvisoryRating"].ToString();
@@ -124,10 +131,12 @@ namespace WebApplication1.API
                         tracktimemillis = (int)t["trackTimeMillis"];
                     if (t["releaseDate"] != null)
                         releasedate = t["releaseDate"].ToString();
+                    if (t["artistName"] != null)
+                        author = t["artistName"].ToString();
                     if (t["primaryGenreName"] != null)
                         primarygenrename = t["primaryGenreName"].ToString();
-                    if (!trackurl.Equals("") && !contentadvisoryrating.Equals("") && !trackname.Equals("") && !primarygenrename.Equals("") && !releasedate.Equals("") && tracktimemillis != 0)
-                        temp.Add(new SearchResult { TrackTimeMillis = tracktimemillis, TrackViewURL = trackurl, TrackName = trackname, ContentAdvisoryRating = contentadvisoryrating, ReleaseDate = releasedate, PrimaryGenreName = primarygenrename });
+                    if (!trackurl.Equals("") && !contentadvisoryrating.Equals("") && !trackname.Equals("") && !primarygenrename.Equals("") && !releasedate.Equals("") && tracktimemillis != 0 && !author.Equals(""))
+                        temp.Add(new SearchResult { TrackTimeMillis = tracktimemillis, TrackViewURL = trackurl, TrackName = trackname, ContentAdvisoryRating = contentadvisoryrating, ReleaseDate = releasedate, PrimaryGenreName = primarygenrename, ArtistName = author }) ;
                 }
             }
             return temp;
