@@ -1,15 +1,15 @@
 ﻿@model List<WebApplication1.Models.SearchResult>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="~/css/site.css">
-    @{
-    ViewData["Title"] = "Search Ebooks";
-    }
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<link rel="stylesheet" href="~/css/site.css">
+@{
+    ViewData["Title"] = "Search Movies";
+}
 
 
-    <h1 class="text-primary" style="text-align:center">Search Ebooks on ITunes</h1>
+<h1 class="text-primary" style="text-align:center">Search Movies on ITunes</h1>
 
-    <script>
+<script>
         $(document).ready(function () {
             var input = document.getElementById("queryid");
 
@@ -31,11 +31,24 @@
 
         function myFunction2(myMessage) {
             window.open(myMessage, '_blank');
-        }
+    }
+
+    function msToHMS(ms) {
+        // 1- Convert to seconds:
+        var seconds = ms / 1000;
+        // 2- Extract hours:
+        var hours = parseInt(seconds / 3600); // 3,600 seconds in 1 hour
+        seconds = seconds % 3600; // seconds remaining after extracting hours
+        // 3- Extract minutes:
+        var minutes = parseInt(seconds / 60); // 60 seconds in 1 minute
+        // 4- Keep only seconds not extracted to minutes:
+        seconds = seconds % 60;
+        return hours + " hours " + minutes + " minutes " + parseInt(seconds) + " seconds";
+    }
 
         function hello1() {
             var query = document.getElementById("queryid").value;
-        
+
             if (query == "")
                 alert("Enter some value");
             else {
@@ -43,7 +56,7 @@
                 $("#pid").empty();
                 var counter = 0;
                 var options = {};
-                options.url = "/api/search/book/" + query;
+                options.url = "/api/search/movie/" + query;
                 options.type = "GET";
                 options.dataType = "json";
                 options.success = function (data) {
@@ -52,9 +65,10 @@
                         var temp = JSON.stringify(element.trackViewURL);
                         $("#tablebody").append("<tr><td>" +
                             JSON.stringify(element.trackName) + "</td><td>" +
-                            JSON.stringify(element.averageUserRating) +
+                            JSON.stringify(element.contentAdvisoryRating) +
                             "</td><td>" + new Date(JSON.stringify(element.releaseDate)).toLocaleDateString() +
-                            "</td><td>" + JSON.stringify(element.userRatingCount) +
+                            "</td><td>" + JSON.stringify(element.primaryGenreName) +
+                            "</td><td>" + msToHMS(JSON.parse(element.trackTimeMillis)) +
                             "</td><td><a href=javascript:myFunction(" + JSON.stringify(element.trackName).trim().replace(/ /g, "+") + "," + temp + ");myFunction2(" + temp + ");>Link</a></td></tr>")
                     });
                     document.getElementById("pid").innerHTML = counter+" records found";
@@ -64,32 +78,33 @@
                 };
                 $.ajax(options);
             }
-            
+
         }
 
-    </script>
+</script>
 
 
-    <div style="overflow-x:auto;" id="divid">
-        <label>Enter your book name:</label>
-        <input type="text" id="queryid" name="query" value="">
+<div style="overflow-x:auto;" id="divid">
+    <label>Enter your Movie name:</label>
+    <input type="text" id="queryid" name="query" value="">
 
-        <input type="button" class=btn-primary id="button1" onclick="hello1()" value="Search"/>
+    <input type="button" class=btn-primary id="button1" onclick="hello1()" value="Search" />
 
-        <br />
-        <br />
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>Book Name</th>
-                    <th>Average User Rating</th>
-                    <th>Release Date</th>
-                    <th>User Rating Count</th>
-                    <th>ITunes Link</th>
-                </tr>
-            </thead>
-            <tbody id="tablebody">
-            </tbody>
-        </table>
-        <p id="pid" style="text-align:center"></p>
-    </div>
+    <br />
+    <br />
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Movie Name</th>
+                <th>Content Advisory Rating</th>
+                <th>Release Date</th>
+                <th>Genre</th>
+                <th>Time</th>
+                <th>ITunes Link</th>
+            </tr>
+        </thead>
+        <tbody id="tablebody">
+        </tbody>
+    </table>
+    <p id="pid" style="text-align:center"></p>
+</div>

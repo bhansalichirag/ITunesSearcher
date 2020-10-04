@@ -35,5 +35,15 @@ namespace WebApplication1.Models
         [DataMember(Name = "userRatingCount")]
         public int? UserRatingCount { get; set; }
 
+        [DataMember(Name = "contentAdvisoryRating")]
+        public string? ContentAdvisoryRating { get; set; }
+
+        [DataMember(Name = "trackTimeMillis")]
+        public int? TrackTimeMillis { get; set; }
+
+        [DataMember(Name = "primaryGenreName")]
+
+        public string PrimaryGenreName { get; set; }
+
     }
 }
