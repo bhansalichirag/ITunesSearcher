@@ -11,35 +11,35 @@ namespace WebApplication1.Models
     public class SearchResult
     {
         [DataMember(Name = "collectionId")]
-        public int? CollectionId { get; set; }
+        public int CollectionId { get; set; }
         //[DataMember(Nam? = "results")]
         //public int CollectionArtistId { get; set; }
         [DataMember(Name = "collectionViewUrl")]
-        public string? CollectionViewUrl { get; set; }
+        public string CollectionViewUrl { get; set; }
 
         [DataMember(Name = "trackId")]
-        public int? TrackId { get; set; }
+        public int TrackId { get; set; }
 
         [DataMember(Name = "trackName")]
-        public string? TrackName { get; set; }
+        public string TrackName { get; set; }
 
         [DataMember(Name = "trackViewUrl")]
-        public string? TrackViewURL { get; set; }
+        public string TrackViewURL { get; set; }
 
         [DataMember(Name = "averageUserRating")]
-        public double? AverageUserRating { get; set; }
+        public double AverageUserRating { get; set; }
 
         [DataMember(Name = "releaseDate")]
-        public string? ReleaseDate { get; set; }
+        public string ReleaseDate { get; set; }
 
         [DataMember(Name = "userRatingCount")]
-        public int? UserRatingCount { get; set; }
+        public int UserRatingCount { get; set; }
 
         [DataMember(Name = "contentAdvisoryRating")]
-        public string? ContentAdvisoryRating { get; set; }
+        public string ContentAdvisoryRating { get; set; }
 
         [DataMember(Name = "trackTimeMillis")]
-        public int? TrackTimeMillis { get; set; }
+        public int TrackTimeMillis { get; set; }
 
         [DataMember(Name = "primaryGenreName")]
 
@@ -50,5 +50,12 @@ namespace WebApplication1.Models
 
         [DataMember(Name = "artistViewUrl")]
         public string artistViewURL { get; set; }
+
+        [DataMember(Name = "artworkUrl100")]
+
+        public string artworkUrl100 { get; set; }
+
+        [DataMember(Name = "price")]
+        public double price { get; set; }
     }
 }

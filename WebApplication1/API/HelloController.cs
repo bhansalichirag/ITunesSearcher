@@ -18,6 +18,7 @@ namespace WebApplication1.API
     public class HelloController : ControllerBase
     {
         // GET: api/search
+        // For testing purposes
         [HttpGet]
         public async Task<List<SearchResult>> Get()
         {
@@ -47,6 +48,7 @@ namespace WebApplication1.API
         }
 
         // GET api/search/book/5
+        //For ebook records
         [HttpGet("book/{id}")]
         public async Task<List<SearchResult>> GetBooks(String id)
         {
@@ -72,6 +74,8 @@ namespace WebApplication1.API
                     int userratingcount = 0;
                     string author = "";
                     string authorurl = "";
+                    double Price = 0;
+                    string artworkUrl = "";
                     if (t["trackId"] != null)
                         trackid = (int)t["trackId"];
                     if (t["trackName"] != null)
@@ -88,8 +92,14 @@ namespace WebApplication1.API
                         author = t["artistName"].ToString();
                     if (t["artistViewUrl"] != null)
                         authorurl = t["artistViewUrl"].ToString();
-                    if (!trackurl.Equals("") && trackid != 0 && !trackname.Equals("") && avgRating!=0 && !releasedate.Equals("") && userratingcount!=0 && !author.Equals("") && !authorurl.Equals(""))
-                        temp.Add(new SearchResult { TrackId = trackid, TrackViewURL = trackurl, TrackName = trackname, AverageUserRating=avgRating, ReleaseDate=releasedate, UserRatingCount=userratingcount, ArtistName=author, artistViewURL = authorurl });
+                    if (t["artworkUrl100"] != null)
+                        artworkUrl = t["artworkUrl100"].ToString();
+                    if (t["price"] != null)
+                    {
+                        Price = (double)t["price"];
+                    }
+                    if (!trackurl.Equals("") && trackid != 0 && !trackname.Equals("") && avgRating!=0 && !releasedate.Equals("") && userratingcount!=0 && !author.Equals("") && !authorurl.Equals("") && !artworkUrl.Equals("") && Price!=0)
+                        temp.Add(new SearchResult { TrackId = trackid, TrackViewURL = trackurl, TrackName = trackname, AverageUserRating=avgRating, ReleaseDate=releasedate, UserRatingCount=userratingcount, ArtistName=author, artistViewURL = authorurl, artworkUrl100 = artworkUrl, price =Price });
                 }
             }
             return temp;
@@ -121,6 +131,7 @@ namespace WebApplication1.API
                     string releasedate = "";
                     string author = "";
                     string contentadvisoryrating = "";
+                    string artworkUrl = "";
                     if (t["contentAdvisoryRating"] != null)
                         contentadvisoryrating = t["contentAdvisoryRating"].ToString();
                     if (t["trackName"] != null)
@@ -135,8 +146,10 @@ namespace WebApplication1.API
                         author = t["artistName"].ToString();
                     if (t["primaryGenreName"] != null)
                         primarygenrename = t["primaryGenreName"].ToString();
-                    if (!trackurl.Equals("") && !contentadvisoryrating.Equals("") && !trackname.Equals("") && !primarygenrename.Equals("") && !releasedate.Equals("") && tracktimemillis != 0 && !author.Equals(""))
-                        temp.Add(new SearchResult { TrackTimeMillis = tracktimemillis, TrackViewURL = trackurl, TrackName = trackname, ContentAdvisoryRating = contentadvisoryrating, ReleaseDate = releasedate, PrimaryGenreName = primarygenrename, ArtistName = author }) ;
+                    if (t["artworkUrl100"] != null)
+                        artworkUrl = t["artworkUrl100"].ToString();
+                    if (!trackurl.Equals("") && !contentadvisoryrating.Equals("") && !trackname.Equals("") && !primarygenrename.Equals("") && !releasedate.Equals("") && tracktimemillis != 0 && !author.Equals("") && !artworkUrl.Equals(""))
+                        temp.Add(new SearchResult { TrackTimeMillis = tracktimemillis, TrackViewURL = trackurl, TrackName = trackname, ContentAdvisoryRating = contentadvisoryrating, ReleaseDate = releasedate, PrimaryGenreName = primarygenrename, ArtistName = author, artworkUrl100 = artworkUrl }) ;
                 }
             }
             return temp;
@@ -168,6 +181,7 @@ namespace WebApplication1.API
                     string authorurl = "";
                     string primarygenrename = "";
                     int tracktimemillis = 0;
+                    string artworkUrl = "";
                     if (t["trackName"] != null)
                         trackname = t["trackName"].ToString();
                     if (t["trackViewUrl"] != null)
@@ -182,8 +196,10 @@ namespace WebApplication1.API
                         primarygenrename = t["primaryGenreName"].ToString();
                     if (t["trackTimeMillis"] != null)
                         tracktimemillis = (int)t["trackTimeMillis"];
-                    if (!trackurl.Equals("") && !trackname.Equals("") && !releasedate.Equals("") && !author.Equals("") && !authorurl.Equals("") && !primarygenrename.Equals("") && tracktimemillis!=0)
-                        temp.Add(new SearchResult { TrackViewURL = trackurl, TrackName = trackname, ReleaseDate = releasedate, ArtistName = author, artistViewURL = authorurl, PrimaryGenreName = primarygenrename, TrackTimeMillis = tracktimemillis });
+                    if (t["artworkUrl100"] != null)
+                        artworkUrl = t["artworkUrl100"].ToString();
+                    if (!trackurl.Equals("") && !trackname.Equals("") && !releasedate.Equals("") && !author.Equals("") && !authorurl.Equals("") && !primarygenrename.Equals("") && tracktimemillis!=0 && !artworkUrl.Equals(""))
+                        temp.Add(new SearchResult { TrackViewURL = trackurl, TrackName = trackname, ReleaseDate = releasedate, ArtistName = author, artistViewURL = authorurl, PrimaryGenreName = primarygenrename, TrackTimeMillis = tracktimemillis, artworkUrl100 = artworkUrl });
                 }
             }
             return temp;

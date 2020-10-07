@@ -102,3 +102,7 @@ tr:nth-child(odd) {
 th, td {
     padding: 15px;
 }
+
+.zoom:hover {
+    transform: scale(1.5); 
+}
