@@ -9,6 +9,8 @@
 
 <h1 class="text-primary" style="text-align:center">Search MusicVideos on ITunes</h1>
 
+
+
 <script>
 
     //Sort table based on the text string
@@ -117,7 +119,7 @@
             });
         });
 
-
+    //To save the name and link clicked in the database
         function myFunction(name, urllink) {
             $.ajax({
                 url: '/Home/RecordClick',
@@ -125,10 +127,12 @@
             });
         }
 
+    //Redirect to the iTunes link
     function myFunction2(urllink) {
         window.open(urllink, '_blank');
         }
 
+    //To convert ms to HH:MM:SS
     function msToHMS(ms) {
         var seconds = ms / 1000;
         var hours = parseInt(seconds / 3600);
@@ -138,6 +142,7 @@
         return hours + " hours " + minutes + " minutes " + parseInt(seconds) + " seconds";
     }
 
+    //To call the HelloController API and get movie related data
         function hello1() {
             var query = document.getElementById("queryid").value;
 
@@ -158,10 +163,10 @@
                         var temp2 = JSON.stringify(element.artistViewURL);
                         var temp3 = JSON.stringify(element.artworkUrl100);
                         $("#tablebody").append(
-                            "<tr><td>" + JSON.stringify(element.trackName) +
+                            "<tr><td>" + JSON.stringify(element.trackName).replaceAll("\"", "") +
                             "</td><td><img class=\"zoom\" src=" + temp3 + " alt = \"No image\">" +
-                            "</td><td>" + JSON.stringify(element.artistName) +
-                            "</td><td>" + JSON.stringify(element.primaryGenreName) +
+                            "</td><td>" + JSON.stringify(element.artistName).replaceAll("\"", "") +
+                            "</td><td>" + JSON.stringify(element.primaryGenreName).replaceAll("\"", "") +
                             "</td><td>" + new Date(JSON.stringify(element.releaseDate)).toLocaleDateString() +
                             "</td><td>" + msToHMS(JSON.parse(element.trackTimeMillis)) +
                             "</td><td>" + JSON.stringify(element.trackPrice) +
@@ -183,15 +188,17 @@
 
 
 <div style="overflow-x:auto;" id="divid">
+    <h4 style="text-align:center">Click Name,Artist or Price headers to sort the table.</h4>
+
     <br /><br />
-          <label>Enter your MusicVideo name:</label>
+    <label>Enter your MusicVideo name:</label>
     <input type="text" id="queryid" name="query" value="">
 
     <input type="button" class=btn-primary id="button1" onclick="hello1()" value="Search" />
 
     <br />
     <br />
-    <table class="table table-bordered">
+    <table class="table table-bordered" id="myTable">
         <thead>
             <tr>
                 <th onclick="sortTable(0)">MusicVideo Name</th>

@@ -117,17 +117,20 @@
             });
         });
 
-        function myFunction(myMessage, myMessage2) {
-            $.ajax({
-                url: '/Home/RecordClick',
-                data: { str1: myMessage.replaceAll("+", " "), str2: myMessage2 }
-            });
-        }
-
-        function myFunction2(myMessage) {
-            window.open(myMessage, '_blank');
+    //To save the name and link clicked in the database
+    function myFunction(name, urllink) {
+        $.ajax({
+            url: '/Home/RecordClick',
+            data: { str1: name.replaceAll("+", " "), str2: urllink }
+        });
     }
 
+    //Redirect to the iTunes link
+    function myFunction2(urllink) {
+        window.open(urllink, '_blank');
+    }
+
+    //To convert ms to HH:MM:SS
         function msToHMS(ms) {
         var seconds = ms / 1000;
         var hours = parseInt(seconds / 3600); 
@@ -137,6 +140,7 @@
         return hours + " hours " + minutes + " minutes " + parseInt(seconds) + " seconds";
     }
 
+    //To call the HelloController API and get movie related data
         function hello1() {
             var query = document.getElementById("queryid").value;
 
@@ -180,6 +184,8 @@
 
 
 <div style="overflow-x:auto;" id="divid">
+    <h4 style="text-align:center">Click Name,Director or Price headers to sort the table.</h4>
+
     <br /><br />
     <label>Enter your Movie name:</label>
     <input type="text" id="queryid" name="query" value="">

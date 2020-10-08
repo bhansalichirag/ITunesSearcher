@@ -7,7 +7,7 @@
 <h1 class="text-primary" style="text-align:center">Link Counter</h1>
 <link rel="stylesheet" href="~/css/site.css">
 
-<h4 style="text-align:center">Click the Name and Visited Frequency headers to sort the table.</h4>
+<h4 style="text-align:center">Click the Name or Visited Frequency headers to sort the table.</h4>
 
 <div class="container p-3">
 
@@ -47,6 +47,7 @@
 
 
 <script>
+    //Sort table by the string value
 function sortTable(n) {
   var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
   table = document.getElementById("myTable");
@@ -84,6 +85,7 @@ function sortTable(n) {
   }
     }
 
+    //Sort table by the integer value
     function sortTableNum(n) {
         var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
         table = document.getElementById("myTable");
