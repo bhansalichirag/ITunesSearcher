@@ -57,5 +57,8 @@ namespace WebApplication1.Models
 
         [DataMember(Name = "price")]
         public double price { get; set; }
+
+        [DataMember(Name = "trackPrice")]
+        public double trackPrice { get; set; }
     }
 }

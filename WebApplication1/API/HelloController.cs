@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Mime;
 using System.Threading.Tasks;
+using System.Transactions;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -107,6 +108,7 @@ namespace WebApplication1.API
         }
 
         // GET api/search/movie/5
+        //For movie records
         [HttpGet("movie/{id}")]
         public async Task<List<SearchResult>> GetMovies(String id)
         {
@@ -132,6 +134,7 @@ namespace WebApplication1.API
                     string author = "";
                     string contentadvisoryrating = "";
                     string artworkUrl = "";
+                    double Price = 0;
                     if (t["contentAdvisoryRating"] != null)
                         contentadvisoryrating = t["contentAdvisoryRating"].ToString();
                     if (t["trackName"] != null)
@@ -148,8 +151,10 @@ namespace WebApplication1.API
                         primarygenrename = t["primaryGenreName"].ToString();
                     if (t["artworkUrl100"] != null)
                         artworkUrl = t["artworkUrl100"].ToString();
-                    if (!trackurl.Equals("") && !contentadvisoryrating.Equals("") && !trackname.Equals("") && !primarygenrename.Equals("") && !releasedate.Equals("") && tracktimemillis != 0 && !author.Equals("") && !artworkUrl.Equals(""))
-                        temp.Add(new SearchResult { TrackTimeMillis = tracktimemillis, TrackViewURL = trackurl, TrackName = trackname, ContentAdvisoryRating = contentadvisoryrating, ReleaseDate = releasedate, PrimaryGenreName = primarygenrename, ArtistName = author, artworkUrl100 = artworkUrl }) ;
+                    if (t["trackPrice"] != null)
+                        Price = (double)t["trackPrice"];
+                    if (!trackurl.Equals("") && !contentadvisoryrating.Equals("") && !trackname.Equals("") && !primarygenrename.Equals("") && !releasedate.Equals("") && tracktimemillis != 0 && !author.Equals("") && !artworkUrl.Equals("") && Price!=0)
+                        temp.Add(new SearchResult { TrackTimeMillis = tracktimemillis, TrackViewURL = trackurl, TrackName = trackname, ContentAdvisoryRating = contentadvisoryrating, ReleaseDate = releasedate, PrimaryGenreName = primarygenrename, ArtistName = author, artworkUrl100 = artworkUrl,trackPrice=Price }) ;
                 }
             }
             return temp;
@@ -157,6 +162,7 @@ namespace WebApplication1.API
         }
 
         // GET api/search/musicVideo/5
+        //For musicVideo records
         [HttpGet("musicVideo/{id}")]
         public async Task<List<SearchResult>> GetMusicVideo(String id)
         {
@@ -182,6 +188,7 @@ namespace WebApplication1.API
                     string primarygenrename = "";
                     int tracktimemillis = 0;
                     string artworkUrl = "";
+                    double Price = 0;
                     if (t["trackName"] != null)
                         trackname = t["trackName"].ToString();
                     if (t["trackViewUrl"] != null)
@@ -198,8 +205,10 @@ namespace WebApplication1.API
                         tracktimemillis = (int)t["trackTimeMillis"];
                     if (t["artworkUrl100"] != null)
                         artworkUrl = t["artworkUrl100"].ToString();
-                    if (!trackurl.Equals("") && !trackname.Equals("") && !releasedate.Equals("") && !author.Equals("") && !authorurl.Equals("") && !primarygenrename.Equals("") && tracktimemillis!=0 && !artworkUrl.Equals(""))
-                        temp.Add(new SearchResult { TrackViewURL = trackurl, TrackName = trackname, ReleaseDate = releasedate, ArtistName = author, artistViewURL = authorurl, PrimaryGenreName = primarygenrename, TrackTimeMillis = tracktimemillis, artworkUrl100 = artworkUrl });
+                    if (t["trackPrice"] != null)
+                        Price = (double)t["trackPrice"];
+                    if (!trackurl.Equals("") && !trackname.Equals("") && !releasedate.Equals("") && !author.Equals("") && !authorurl.Equals("") && !primarygenrename.Equals("") && tracktimemillis != 0 && !artworkUrl.Equals("") && Price != 0)
+                        temp.Add(new SearchResult { TrackViewURL = trackurl, TrackName = trackname, ReleaseDate = releasedate, ArtistName = author, artistViewURL = authorurl, PrimaryGenreName = primarygenrename, TrackTimeMillis = tracktimemillis, artworkUrl100 = artworkUrl, trackPrice = Price }) ;
                 }
             }
             return temp;
