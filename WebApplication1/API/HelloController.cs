@@ -6,6 +6,7 @@ using System.Net.Mime;
 using System.Threading.Tasks;
 using System.Transactions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using WebApplication1.Models;
@@ -189,6 +190,7 @@ namespace WebApplication1.API
                     int tracktimemillis = 0;
                     string artworkUrl = "";
                     double Price = 0;
+                    string PreviewURL = "";
                     if (t["trackName"] != null)
                         trackname = t["trackName"].ToString();
                     if (t["trackViewUrl"] != null)
@@ -207,8 +209,10 @@ namespace WebApplication1.API
                         artworkUrl = t["artworkUrl100"].ToString();
                     if (t["trackPrice"] != null)
                         Price = (double)t["trackPrice"];
-                    if (!trackurl.Equals("") && !trackname.Equals("") && !releasedate.Equals("") && !author.Equals("") && !authorurl.Equals("") && !primarygenrename.Equals("") && tracktimemillis != 0 && !artworkUrl.Equals("") && Price != 0)
-                        temp.Add(new SearchResult { TrackViewURL = trackurl, TrackName = trackname, ReleaseDate = releasedate, ArtistName = author, artistViewURL = authorurl, PrimaryGenreName = primarygenrename, TrackTimeMillis = tracktimemillis, artworkUrl100 = artworkUrl, trackPrice = Price }) ;
+                    if (t["previewUrl"] != null)
+                        PreviewURL = t["previewUrl"].ToString();
+                    if (!trackurl.Equals("") && !trackname.Equals("") && !releasedate.Equals("") && !author.Equals("") && !authorurl.Equals("") && !primarygenrename.Equals("") && tracktimemillis != 0 && !artworkUrl.Equals("") && Price != 0 && !PreviewURL.Equals(null))
+                        temp.Add(new SearchResult { TrackViewURL = trackurl, TrackName = trackname, ReleaseDate = releasedate, ArtistName = author, artistViewURL = authorurl, PrimaryGenreName = primarygenrename, TrackTimeMillis = tracktimemillis, artworkUrl100 = artworkUrl, trackPrice = Price, previewUrl = PreviewURL }) ;
                 }
             }
             return temp;

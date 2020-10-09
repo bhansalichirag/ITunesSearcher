@@ -12,10 +12,15 @@ namespace WebApplication1.Models
     {
         [DataMember(Name = "collectionId")]
         public int CollectionId { get; set; }
-        //[DataMember(Nam? = "results")]
-        //public int CollectionArtistId { get; set; }
+        
         [DataMember(Name = "collectionViewUrl")]
         public string CollectionViewUrl { get; set; }
+
+        [DataMember(Name = "collectionName")]
+        public string collectionName { get; set; }
+
+        [DataMember(Name = "collectionPrice")]
+        public double collectionPrice { get; set; }
 
         [DataMember(Name = "trackId")]
         public int TrackId { get; set; }
@@ -60,5 +65,8 @@ namespace WebApplication1.Models
 
         [DataMember(Name = "trackPrice")]
         public double trackPrice { get; set; }
+
+        [DataMember(Name = "previewUrl")]
+        public string previewUrl { get; set; }
     }
 }
