@@ -24,7 +24,7 @@ namespace WebApplication1.API
         [HttpGet]
         public async Task<List<SearchResult>> Get()
         {
-            List<SearchResult> temp = new List<SearchResult>();
+            List<SearchResult> search_list = new List<SearchResult>();
             using (var client = new HttpClient())
             {
                 var url = new Uri($"https://itunes.apple.com/search?term=Big&entity=ebook&limit=20");
@@ -36,17 +36,17 @@ namespace WebApplication1.API
                 JObject json1 = JObject.Parse(json);
                 foreach (var t in json1["results"])
                 {
-                    int tempint = 0;
+                    int value = 0;
                     string urlstr = "";
                     if (t["collectionId"] != null)
-                        tempint = (int)t["collectionId"];
+                        value = (int)t["collectionId"];
                     if (t["collectionViewUrl"] != null)
                         urlstr = t["collectionViewUrl"].ToString();
-                    if(!urlstr.Equals("") && tempint!=0)
-                        temp.Add(new SearchResult { CollectionId = tempint, CollectionViewUrl = urlstr });
+                    if(!urlstr.Equals("") && value!=0)
+                        search_list.Add(new SearchResult { CollectionId = value, CollectionViewUrl = urlstr });
                 }
             }
-            return temp;
+            return search_list;
         }
 
         // GET api/search/book/5
@@ -54,9 +54,9 @@ namespace WebApplication1.API
         [HttpGet("book/{id}")]
         public async Task<List<SearchResult>> GetBooks(String id)
         {
-            List<SearchResult> temp = new List<SearchResult>();
+            List<SearchResult> search_list = new List<SearchResult>();
             if (id.Equals(""))
-                return temp;
+                return search_list;
             using (var client = new HttpClient())
             {
                 var url = new Uri($"https://itunes.apple.com/search?term=" + id +"&entity=ebook&limit=20");
@@ -101,10 +101,10 @@ namespace WebApplication1.API
                         Price = (double)t["price"];
                     }
                     if (!trackurl.Equals("") && trackid != 0 && !trackname.Equals("") && avgRating!=0 && !releasedate.Equals("") && userratingcount!=0 && !author.Equals("") && !authorurl.Equals("") && !artworkUrl.Equals("") && Price!=0)
-                        temp.Add(new SearchResult { TrackId = trackid, TrackViewURL = trackurl, TrackName = trackname, AverageUserRating=avgRating, ReleaseDate=releasedate, UserRatingCount=userratingcount, ArtistName=author, artistViewURL = authorurl, artworkUrl100 = artworkUrl, price =Price });
+                        search_list.Add(new SearchResult { TrackId = trackid, TrackViewURL = trackurl, TrackName = trackname, AverageUserRating=avgRating, ReleaseDate=releasedate, UserRatingCount=userratingcount, ArtistName=author, artistViewURL = authorurl, artworkUrl100 = artworkUrl, price =Price });
                 }
             }
-            return temp;
+            return search_list;
 
         }
 
@@ -113,9 +113,9 @@ namespace WebApplication1.API
         [HttpGet("movie/{id}")]
         public async Task<List<SearchResult>> GetMovies(String id)
         {
-            List<SearchResult> temp = new List<SearchResult>();
+            List<SearchResult> search_list = new List<SearchResult>();
             if (id.Equals(""))
-                return temp;
+                return search_list;
             using (var client = new HttpClient())
             {
                 var url = new Uri($"https://itunes.apple.com/search?term=" + id + "&entity=movie&limit=20");
@@ -136,6 +136,7 @@ namespace WebApplication1.API
                     string contentadvisoryrating = "";
                     string artworkUrl = "";
                     double Price = 0;
+                    string PreviewURL = "";
                     if (t["contentAdvisoryRating"] != null)
                         contentadvisoryrating = t["contentAdvisoryRating"].ToString();
                     if (t["trackName"] != null)
@@ -154,11 +155,13 @@ namespace WebApplication1.API
                         artworkUrl = t["artworkUrl100"].ToString();
                     if (t["trackPrice"] != null)
                         Price = (double)t["trackPrice"];
-                    if (!trackurl.Equals("") && !contentadvisoryrating.Equals("") && !trackname.Equals("") && !primarygenrename.Equals("") && !releasedate.Equals("") && tracktimemillis != 0 && !author.Equals("") && !artworkUrl.Equals("") && Price!=0)
-                        temp.Add(new SearchResult { TrackTimeMillis = tracktimemillis, TrackViewURL = trackurl, TrackName = trackname, ContentAdvisoryRating = contentadvisoryrating, ReleaseDate = releasedate, PrimaryGenreName = primarygenrename, ArtistName = author, artworkUrl100 = artworkUrl,trackPrice=Price }) ;
+                    if (t["previewUrl"] != null)
+                        PreviewURL = t["previewUrl"].ToString();
+                    if (!trackurl.Equals("") && !contentadvisoryrating.Equals("") && !trackname.Equals("") && !primarygenrename.Equals("") && !releasedate.Equals("") && tracktimemillis != 0 && !author.Equals("") && !artworkUrl.Equals("") && Price!=0 && !PreviewURL.Equals(""))
+                        search_list.Add(new SearchResult { TrackTimeMillis = tracktimemillis, TrackViewURL = trackurl, TrackName = trackname, ContentAdvisoryRating = contentadvisoryrating, ReleaseDate = releasedate, PrimaryGenreName = primarygenrename, ArtistName = author, artworkUrl100 = artworkUrl,trackPrice=Price, previewUrl = PreviewURL}) ;
                 }
             }
-            return temp;
+            return search_list;
 
         }
 
@@ -167,9 +170,9 @@ namespace WebApplication1.API
         [HttpGet("musicVideo/{id}")]
         public async Task<List<SearchResult>> GetMusicVideo(String id)
         {
-            List<SearchResult> temp = new List<SearchResult>();
+            List<SearchResult> search_list = new List<SearchResult>();
             if (id.Equals(""))
-                return temp;
+                return search_list;
             using (var client = new HttpClient())
             {
                 var url = new Uri($"https://itunes.apple.com/search?term=" + id + "&entity=musicVideo&limit=20");
@@ -212,12 +215,60 @@ namespace WebApplication1.API
                     if (t["previewUrl"] != null)
                         PreviewURL = t["previewUrl"].ToString();
                     if (!trackurl.Equals("") && !trackname.Equals("") && !releasedate.Equals("") && !author.Equals("") && !authorurl.Equals("") && !primarygenrename.Equals("") && tracktimemillis != 0 && !artworkUrl.Equals("") && Price != 0 && !PreviewURL.Equals(null))
-                        temp.Add(new SearchResult { TrackViewURL = trackurl, TrackName = trackname, ReleaseDate = releasedate, ArtistName = author, artistViewURL = authorurl, PrimaryGenreName = primarygenrename, TrackTimeMillis = tracktimemillis, artworkUrl100 = artworkUrl, trackPrice = Price, previewUrl = PreviewURL }) ;
+                        search_list.Add(new SearchResult { TrackViewURL = trackurl, TrackName = trackname, ReleaseDate = releasedate, ArtistName = author, artistViewURL = authorurl, PrimaryGenreName = primarygenrename, TrackTimeMillis = tracktimemillis, artworkUrl100 = artworkUrl, trackPrice = Price, previewUrl = PreviewURL }) ;
                 }
             }
-            return temp;
+            return search_list;
 
         }
 
+        // GET api/search/podcast/5
+        //For podcast records
+        [HttpGet("podcast/{id}")]
+
+        public async Task<List<SearchResult>> GetPodcast(String id)
+        {
+            List<SearchResult> search_list = new List<SearchResult>();
+            if (id.Equals(""))
+                return search_list;
+            using (var client = new HttpClient())
+            {
+                var url = new Uri($"https://itunes.apple.com/search?term=" + id + "&entity=podcast&limit=20");
+                var response = await client.GetAsync(url);
+
+                string json;
+                using (var content = response.Content)
+                    json = await content.ReadAsStringAsync();
+                JObject json1 = JObject.Parse(json);
+                foreach (var t in json1["results"])
+                {
+                    string trackurl = "";
+                    string trackname = "";
+                    string primarygenrename = "";
+                    string releasedate = "";
+                    string author = "";
+                    string contentadvisoryrating = "";
+                    string artworkUrl = "";
+                    if (t["artistName"] != null)
+                        author = t["artistName"].ToString();
+                    if (t["trackName"] != null)
+                        trackname = t["trackName"].ToString();
+                    if (t["artworkUrl100"] != null)
+                        artworkUrl = t["artworkUrl100"].ToString();
+                    if (t["trackViewUrl"] != null)
+                        trackurl = t["trackViewUrl"].ToString();
+                    if (t["contentAdvisoryRating"] != null)
+                        contentadvisoryrating = t["contentAdvisoryRating"].ToString();
+                    if (t["primaryGenreName"] != null)
+                        primarygenrename = t["primaryGenreName"].ToString();
+                    if (t["releaseDate"] != null)
+                        releasedate = t["releaseDate"].ToString();
+                    if (!trackurl.Equals("") && !contentadvisoryrating.Equals("") && !trackname.Equals("") && !primarygenrename.Equals("") && !releasedate.Equals("") && !author.Equals("") && !artworkUrl.Equals(""))
+                        search_list.Add(new SearchResult { TrackViewURL = trackurl, TrackName = trackname, ContentAdvisoryRating = contentadvisoryrating, ReleaseDate = releasedate, PrimaryGenreName = primarygenrename, ArtistName = author, artworkUrl100 = artworkUrl });
+                }
+            }
+            return search_list;
+
+        }
     }
 }

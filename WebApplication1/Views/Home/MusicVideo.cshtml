@@ -120,7 +120,7 @@
         });
 
     //To save the name and link clicked in the database
-        function myFunction(name, urllink) {
+        function saveFunction(name, urllink) {
             $.ajax({
                 url: '/Home/RecordClick',
                 data: { str1: name.replaceAll("+", " "), str2: urllink }
@@ -128,7 +128,7 @@
         }
 
     //Redirect to the iTunes link
-    function myFunction2(urllink) {
+    function redirectFunction(urllink) {
         window.open(urllink, '_blank');
         }
 
@@ -143,7 +143,7 @@
     }
 
     //To call the HelloController API and get movie related data
-        function hello1() {
+        function mainFunction() {
             var query = document.getElementById("queryid").value;
 
             if (query == "")
@@ -159,20 +159,20 @@
                 options.success = function (data) {
                     data.forEach(function (element) {
                         counter++;
-                        var temp = JSON.stringify(element.trackViewURL);
-                        var temp2 = JSON.stringify(element.artistViewURL);
-                        var temp3 = JSON.stringify(element.artworkUrl100);
-                        var temp4 = JSON.stringify(element.previewUrl);
+                        var trackURL = JSON.stringify(element.trackViewURL);
+                        var artistURL = JSON.stringify(element.artistViewURL);
+                        var imageURL = JSON.stringify(element.artworkUrl100);
+                        var previewURL = JSON.stringify(element.previewUrl);
                         $("#tablebody").append(
                             "<tr><td>" + JSON.stringify(element.trackName).replaceAll("\"", "") +
-                            "</td><td><a href= javascript:myFunction2("+ temp4 +");><img class=\"zoom\" src=" + temp3 + " alt = \"No image\"></a>" +
+                            "</td><td><a href= javascript:redirectFunction("+ previewURL +");><img class=\"zoom\" src=" + imageURL + " alt = \"No image\"></a>" +
                             "</td><td>" + JSON.stringify(element.artistName).replaceAll("\"", "") +
                             "</td><td>" + JSON.stringify(element.primaryGenreName).replaceAll("\"", "") +
                             "</td><td>" + new Date(JSON.stringify(element.releaseDate)).toLocaleDateString() +
                             "</td><td>" + msToHMS(JSON.parse(element.trackTimeMillis)) +
                             "</td><td>" + JSON.stringify(element.trackPrice) +
-                            "</td><td><a href=javascript:myFunction(" + JSON.stringify(element.trackName).trim().replace(/ /g, "+") + "," + temp + ");myFunction2(" + temp +
-                            ");>Link</a></td><td><a href=javascript:myFunction(" + JSON.stringify(element.artistName).trim().replace(/ /g, "+") + "," + temp2 + ");myFunction2(" + temp2 +
+                            "</td><td><a href=javascript:saveFunction(" + JSON.stringify(element.trackName).trim().replace(/ /g, "+") + "," + trackURL + ");redirectFunction(" + trackURL +
+                            ");>Link</a></td><td><a href=javascript:saveFunction(" + JSON.stringify(element.artistName).trim().replace(/ /g, "+") + "," + artistURL + ");redirectFunction(" + artistURL +
                             ");>Link</a></td></tr>")
                     });
                     document.getElementById("pid").innerHTML = counter+" records found";
@@ -189,7 +189,7 @@
 
 
 <div style="overflow-x:auto;" id="divid">
-    <h4 style="text-align:center">Click Name,Artist or Price headers to sort the table.</h4>
+    <h4 style="text-align:center">Click Name,Artist, Genre or Price headers to sort the table.</h4>
     <h5 style="text-align:center">Click the image to see the preview</h5>
 
 
@@ -197,7 +197,7 @@
     <label>Enter your MusicVideo name:</label>
     <input type="text" id="queryid" name="query" value="">
 
-    <input type="button" class=btn-primary id="button1" onclick="hello1()" value="Search" />
+    <input type="button" class=btn-primary id="button1" onclick="mainFunction()" value="Search" />
 
     <br />
     <br />
@@ -205,9 +205,9 @@
         <thead>
             <tr>
                 <th onclick="sortTable(0)">MusicVideo Name</th>
-                <th>MusicVideo Image</th>
+                <th>MusicVideo Preview</th>
                 <th onclick="sortTable(2)">Artist</th>
-                <th>Genre</th>
+                <th onclick="sortTable(3)">Genre</th>
                 <th>Release Date</th>
                 <th>Time</th>
                 <th onclick="sortTableNum(6)">Price (in USD)</th>
