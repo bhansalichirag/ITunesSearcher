@@ -225,7 +225,6 @@ namespace WebApplication1.API
         // GET api/search/podcast/5
         //For podcast records
         [HttpGet("podcast/{id}")]
-
         public async Task<List<SearchResult>> GetPodcast(String id)
         {
             List<SearchResult> search_list = new List<SearchResult>();
@@ -270,5 +269,111 @@ namespace WebApplication1.API
             return search_list;
 
         }
+
+        //GET api/search/audiobook/5
+        //For audioBook records
+        [HttpGet("audiobook/{id}")]
+        public async Task<List<SearchResult>> GetAudioBook(String id)
+        {
+            List<SearchResult> search_list = new List<SearchResult>();
+            if (id.Equals(""))
+                return search_list;
+            using (var client = new HttpClient())
+            {
+                var url = new Uri($"https://itunes.apple.com/search?term=" + id + "&entity=audiobook&limit=20");
+                var response = await client.GetAsync(url);
+
+                string json;
+                using (var content = response.Content)
+                    json = await content.ReadAsStringAsync();
+                JObject json1 = JObject.Parse(json);
+                foreach (var t in json1["results"])
+                {
+                    string primarygenrename = "";
+                    string releasedate = "";
+                    string author = "";
+                    string artworkUrl = "";
+                    string CollectionName = "";
+                    string authorURL = "";
+                    string collectionURL = "";
+                    double collectionprice = 0;
+                    string previewURL = "";
+                    if (t["artistName"] != null)
+                        author = t["artistName"].ToString();
+                    if (t["collectionName"] != null)
+                        CollectionName = t["collectionName"].ToString();
+                    if (t["artistViewUrl"] != null)
+                        authorURL = t["artistViewUrl"].ToString();
+                    if (t["collectionViewUrl"] != null)
+                        collectionURL = t["collectionViewUrl"].ToString();
+                    if (t["artworkUrl100"] != null)
+                        artworkUrl = t["artworkUrl100"].ToString();
+                    if (t["collectionPrice"] != null)
+                        collectionprice = (double)t["collectionPrice"];
+                    if (t["previewUrl"] != null)
+                        previewURL = t["previewUrl"].ToString();
+                    if (t["primaryGenreName"] != null)
+                        primarygenrename = t["primaryGenreName"].ToString();
+                    if (t["releaseDate"] != null)
+                        releasedate = t["releaseDate"].ToString();
+                    if (!primarygenrename.Equals("") && !releasedate.Equals("") && !author.Equals("") && !artworkUrl.Equals("") && !CollectionName.Equals("") && !authorURL.Equals("") && !collectionURL.Equals("") && !previewURL.Equals("") && collectionprice!=0)
+                        search_list.Add(new SearchResult { ReleaseDate = releasedate, PrimaryGenreName = primarygenrename, ArtistName = author, artworkUrl100 = artworkUrl, collectionName = CollectionName, artistViewURL = authorURL, CollectionViewUrl = collectionURL, collectionPrice = collectionprice, previewUrl = previewURL });
+                }
+            }
+            return search_list;
+
+        }
+
+        //GET api/search/album/5
+        //For album records
+        [HttpGet("album/{id}")]
+        public async Task<List<SearchResult>> GetAlbum(String id)
+        {
+            List<SearchResult> search_list = new List<SearchResult>();
+            if (id.Equals(""))
+                return search_list;
+            using (var client = new HttpClient())
+            {
+                var url = new Uri($"https://itunes.apple.com/search?term=" + id + "&entity=album&limit=20");
+                var response = await client.GetAsync(url);
+
+                string json;
+                using (var content = response.Content)
+                    json = await content.ReadAsStringAsync();
+                JObject json1 = JObject.Parse(json);
+                foreach (var t in json1["results"])
+                {
+                    string primarygenrename = "";
+                    string releasedate = "";
+                    string author = "";
+                    string artworkUrl = "";
+                    string CollectionName = "";
+                    string authorURL = "";
+                    string collectionURL = "";
+                    double collectionprice = 0;
+                    if (t["artistName"] != null)
+                        author = t["artistName"].ToString();
+                    if (t["collectionName"] != null)
+                        CollectionName = t["collectionName"].ToString();
+                    if (t["artistViewUrl"] != null)
+                        authorURL = t["artistViewUrl"].ToString();
+                    if (t["collectionViewUrl"] != null)
+                        collectionURL = t["collectionViewUrl"].ToString();
+                    if (t["artworkUrl100"] != null)
+                        artworkUrl = t["artworkUrl100"].ToString();
+                    if (t["collectionPrice"] != null)
+                        collectionprice = (double)t["collectionPrice"];
+                    if (t["primaryGenreName"] != null)
+                        primarygenrename = t["primaryGenreName"].ToString();
+                    if (t["releaseDate"] != null)
+                        releasedate = t["releaseDate"].ToString();
+                    if (!primarygenrename.Equals("") && !releasedate.Equals("") && !author.Equals("") && !artworkUrl.Equals("") && !CollectionName.Equals("") && !authorURL.Equals("") && !collectionURL.Equals("") && collectionprice != 0)
+                        search_list.Add(new SearchResult { ReleaseDate = releasedate, PrimaryGenreName = primarygenrename, ArtistName = author, artworkUrl100 = artworkUrl, collectionName = CollectionName, artistViewURL = authorURL, CollectionViewUrl = collectionURL, collectionPrice = collectionprice });
+                }
+            }
+            return search_list;
+
+        }
+
     }
 }

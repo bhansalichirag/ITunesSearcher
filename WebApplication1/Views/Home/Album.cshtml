@@ -1,0 +1,208 @@
+﻿@model List<WebApplication1.Models.SearchResult>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<link rel="stylesheet" href="~/css/site.css">
+@{
+    ViewData["Title"] = "Search Album";
+}
+
+
+<h1 class="text-primary" style="text-align:center">Search Album on ITunes</h1>
+
+
+
+<script>
+
+    //Sort table based on the text string
+    function sortTable(n) {
+        var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+        table = document.getElementById("myTable");
+        switching = true;
+        dir = "asc";
+        while (switching) {
+            switching = false;
+            rows = table.rows;
+            for (i = 1; i < (rows.length - 1); i++) {
+                shouldSwitch = false;
+                x = rows[i].getElementsByTagName("TD")[n];
+                y = rows[i + 1].getElementsByTagName("TD")[n];
+                if (dir == "asc") {
+                    if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                } else if (dir == "desc") {
+                    if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+            }
+            if (shouldSwitch) {
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                switching = true;
+                switchcount++;
+            } else {
+                if (switchcount == 0 && dir == "asc") {
+                    dir = "desc";
+                    switching = true;
+                }
+            }
+        }
+    }
+
+    //Sort table based on the integer, number value
+    function sortTableNum(n) {
+        var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+        table = document.getElementById("myTable");
+        switching = true;
+        // Set the sorting direction to ascending:
+        dir = "asc";
+        /* Make a loop that will continue until
+        no switching has been done: */
+        while (switching) {
+            // Start by saying: no switching is done:
+            switching = false;
+            rows = table.rows;
+            /* Loop through all table rows (except the
+            first, which contains table headers): */
+            for (i = 1; i < (rows.length - 1); i++) {
+                // Start by saying there should be no switching:
+                shouldSwitch = false;
+                /* Get the two elements you want to compare,
+                one from current row and one from the next: */
+                x = rows[i].getElementsByTagName("TD")[n];
+                y = rows[i + 1].getElementsByTagName("TD")[n];
+                /* Check if the two rows should switch place,
+                based on the direction, asc or desc: */
+                if (dir == "asc") {
+                    if (Number(x.innerHTML) > Number(y.innerHTML)) {
+                        // If so, mark as a switch and break the loop:
+                        shouldSwitch = true;
+                        break;
+                    }
+                } else if (dir == "desc") {
+                    if (Number(x.innerHTML) < Number(y.innerHTML)) {
+                        // If so, mark as a switch and break the loop:
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+            }
+            if (shouldSwitch) {
+                /* If a switch has been marked, make the switch
+                and mark that a switch has been done: */
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                switching = true;
+                // Each time a switch is done, increase this count by 1:
+                switchcount++;
+            } else {
+                /* If no switching has been done AND the direction is "asc",
+                set the direction to "desc" and run the while loop again. */
+                if (switchcount == 0 && dir == "asc") {
+                    dir = "desc";
+                    switching = true;
+                }
+            }
+        }
+    }
+
+        //When the page is loaded
+        $(document).ready(function () {
+            var input = document.getElementById("queryid");
+
+            input.addEventListener("keyup", function (event) {
+                if (event.keyCode === 13) {
+                    event.preventDefault();
+                    document.getElementById("button1").click();
+                }
+            });
+        });
+
+    //To save the name and link clicked in the database
+        function saveFunction(name, urllink) {
+            $.ajax({
+                url: '/Home/RecordClick',
+                data: { str1: name.replaceAll("+", " "), str2: urllink }
+            });
+        }
+
+    //Redirect to the iTunes link
+    function redirectFunction(urllink) {
+        window.open(urllink, '_blank');
+        }
+
+    //To call the HelloController API and get movie related data
+        function mainFunction() {
+            var query = document.getElementById("queryid").value;
+
+            if (query == "")
+                alert("Enter some value");
+            else {
+                $("#tablebody").empty();
+                $("#pid").empty();
+                var counter = 0;
+                var options = {};
+                options.url = "/api/search/album/" + query;
+                options.type = "GET";
+                options.dataType = "json";
+                options.success = function (data) {
+                    data.forEach(function (element) {
+                        counter++;
+                        var collectionViewURL = JSON.stringify(element.collectionViewUrl);
+                        var artistURL = JSON.stringify(element.artistViewURL);
+                        var imageURL = JSON.stringify(element.artworkUrl100);
+                        var previewURL = JSON.stringify(element.previewUrl);
+                        $("#tablebody").append(
+                            "<tr><td>" + JSON.stringify(element.collectionName).replaceAll("\"", "") +
+                            "</td><td><img class=\"zoom\" src=" + imageURL + " alt = \"No image\"></a>" +
+                            "</td><td>" + JSON.stringify(element.artistName).replaceAll("\"", "") +
+                            "</td><td>" + JSON.stringify(element.primaryGenreName).replaceAll("\"", "") +
+                            "</td><td>" + new Date(JSON.stringify(element.releaseDate)).toLocaleDateString() +
+                            "</td><td>" + JSON.stringify(element.collectionPrice) +
+                            "</td><td><a href=javascript:saveFunction("+JSON.stringify(element.collectionName).trim().replace(/ /g, "+") + "," + collectionViewURL + ");redirectFunction(" + collectionViewURL +
+                            ");>Link</a></td><td><a href=javascript:saveFunction(" + JSON.stringify(element.artistName).trim().replace(/ /g, "+") + "," + artistURL + ");redirectFunction(" + artistURL +
+                            ");>Link</a></td></tr>")
+                    });
+                    document.getElementById("pid").innerHTML = counter+" records found";
+                };
+                options.error = function () {
+                    $("#msg").html("Error while calling the Web API!");
+                };
+                $.ajax(options);
+            }
+
+        }
+
+</script>
+
+
+<div style="overflow-x:auto;" id="divid">
+    <h4 style="text-align:center">Click Name,Artist, Genre or Price headers to sort the table.</h4>
+
+    <br /><br />
+          <label>Enter your Album name:</label>
+    <input type="text" id="queryid" name="query" value="">
+
+    <input type="button" class=btn-primary id="button1" onclick="mainFunction()" value="Search" />
+
+    <br />
+    <br />
+    <table class="table table-bordered" id="myTable">
+        <thead>
+            <tr>
+                <th onclick="sortTable(0)">Album Name</th>
+                <th>Album image</th>
+                <th onclick="sortTable(2)">Artist</th>
+                <th onclick="sortTable(3)">Genre</th>
+                <th>Release Date</th>
+                <th onclick="sortTableNum(5)">Price (in USD)</th>
+                <th>ITunes Album Link</th>
+                <th>ITunes Artist Link</th>
+            </tr>
+        </thead>
+        <tbody id="tablebody">
+        </tbody>
+    </table>
+    <p id="pid" style="text-align:center"></p>
+</div>
