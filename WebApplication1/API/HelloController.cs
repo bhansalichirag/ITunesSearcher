@@ -19,8 +19,10 @@ namespace WebApplication1.API
     [ApiController]
     public class HelloController : ControllerBase
     {
-        // GET: api/search
-        // For testing purposes
+        /// <summary>
+        /// For testing purpose
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public async Task<List<SearchResult>> Get()
         {
@@ -49,8 +51,12 @@ namespace WebApplication1.API
             return search_list;
         }
 
-        // GET api/search/book/5
-        //For ebook records
+        /// <summary>
+        /// For book records
+        /// the input is in string format like "fire","world"
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("book/{id}")]
         public async Task<List<SearchResult>> GetBooks(String id)
         {
@@ -108,8 +114,12 @@ namespace WebApplication1.API
 
         }
 
-        // GET api/search/movie/5
-        //For movie records
+        /// <summary>
+        /// For movie records
+        /// the input is in string format like "fire", "world"
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("movie/{id}")]
         public async Task<List<SearchResult>> GetMovies(String id)
         {
@@ -165,8 +175,12 @@ namespace WebApplication1.API
 
         }
 
-        // GET api/search/musicVideo/5
-        //For musicVideo records
+        /// <summary>
+        /// for musicVideo records
+        /// the input is in string format like "fire","world"
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("musicVideo/{id}")]
         public async Task<List<SearchResult>> GetMusicVideo(String id)
         {
@@ -222,8 +236,12 @@ namespace WebApplication1.API
 
         }
 
-        // GET api/search/podcast/5
-        //For podcast records
+        /// <summary>
+        /// For podcast records
+        /// the input is in string format like "fire","world"
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("podcast/{id}")]
         public async Task<List<SearchResult>> GetPodcast(String id)
         {
@@ -270,8 +288,12 @@ namespace WebApplication1.API
 
         }
 
-        //GET api/search/audiobook/5
-        //For audioBook records
+        /// <summary>
+        /// For audiobook records
+        /// the input is in string format like "fire","world"
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("audiobook/{id}")]
         public async Task<List<SearchResult>> GetAudioBook(String id)
         {
@@ -324,8 +346,12 @@ namespace WebApplication1.API
 
         }
 
-        //GET api/search/album/5
-        //For album records
+        /// <summary>
+        /// For album records
+        /// the input is in string format like "fire","world"
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("album/{id}")]
         public async Task<List<SearchResult>> GetAlbum(String id)
         {
